@@ -31,7 +31,7 @@ def draw_squares(ax, n, p):
         # top right
         draw_squares(ax, n-1, equation+750)
         # bottom left
-        draw_squares(ax, n-1, equation+250)
+        draw_squares(ax, n-1, equation-250)
         # top left
         #draw_squares(ax, n-1, equation1)
         # bottom right
