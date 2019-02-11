@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb  6 21:04:13 2019
+
+@author: Paola
+"""
+
+# PAOLA TERRAZAS
+# CS2302 
+# RECURSIVELY DRAWING SQUARES
+# DR. FUENTES
+# TA - ANINDITA NATH
+# 2.10.2019
+# NUM 1 SQUARES
+
+   
+import numpy as np
+import matplotlib.pyplot as plt
+       
+        
+def draw_squares(ax, n, p):
+    if n > 0:
+        #n1 = [[-250, +750], [-250, 250], [-750, 250], [-750, +750], [-250, +750]]
+        #n2 = [[+750, -250], [+750, -750], [250, -750], [250, -250], [+750, -250]]
+        #equation1 = p + n1 
+        #equation2 = p + n2 
+        ax.plot(p[:,1], p[:,0], color='k')
+        equation = p /2 
+        print(p)
+        # top right
+        draw_squares(ax, n-1, equation+750)
+        # bottom left
+        draw_squares(ax, n-1, equation+250)
+        # top left
+        #draw_squares(ax, n-1, equation1)
+        # bottom right
+        #draw_squares(ax, n-1, equation2)
+        
+        #draw_squares(ax, n-1, lst)
+        #drawsquares(ax, n-1, equation2)
+        
+plt.close("all") 
+original_size = 1000
+p = np.array([[0,0],[0,original_size],[original_size,original_size],[original_size,0],[0,0]])
+fig, ax = plt.subplots()
+draw_squares(ax,2,p)
+ax.set_aspect(1.0)
+
+
+ax.axis('on')
+plt.show()
+fig.savefig('squares.png') 
+plt.close("all") 
+
+fig, ax = plt.subplots()
+draw_squares(ax,3,p)
+ax.set_aspect(1.0)
+
+ax.axis('on')
+plt.show()
+fig.savefig('squares1.png')
+
+plt.close("all") 
+fig, ax = plt.subplots()
+draw_squares(ax,4,p)
+ax.set_aspect(1.0)
+
+ax.axis('on')
+plt.show()
+fig.savefig('squares2.png')     
+       
+        
+        
+        
+        
