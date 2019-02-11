@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Feb  7 16:14:24 2019
+
+@author: Paola
+"""
+
+# PAOLA TERRAZAS
+# CS2302 
+# RECURSIVELY DRAWING TREES
+# DR. FUENTES
+# TA - ANINDITA NATH
+# 2.10.2019
+# NUM 3 TREES 
+
+import numpy as np
+import matplotlib.pyplot as plt
+def draw_tree(ax, n, p):
+    if n>0:
+       w1 = p[0,0] - p[2,0]
+       w1 = w1 * -1
+       w = p[0,0] - p[2,0]
+       w = (w/2)
+       n1 = [[w/2,-500],[w,-500],[w*1.5,-500]]
+       n2 = [[(w/2)+w1,-500],[w+w1,-500],[(w*1.5)+w1,-500]]
+       p1 = p + n1
+       p2 = p + n2
+       ax.plot(p[:,0],p[:,1],color='k')
+       draw_tree(ax,n-1,p1)
+       draw_tree(ax,n-1,p2)
+       
+plt.close("all") 
+p = np.array([[-300,-500],[0,0],[300,-500]])
+fig, ax = plt.subplots()
+draw_tree(ax,3,p)
+ax.set_aspect(1.0)
+ax.axis('on')
+plt.show()
+fig.savefig('tree.png')
+
+plt.close("all") 
+fig, ax = plt.subplots()
+draw_tree(ax,4,p)
+ax.set_aspect(1.0)
+ax.axis('on')
+plt.show()
+fig.savefig('tree1.png')
+
+plt.close("all") 
+fig, ax = plt.subplots()
+draw_tree(ax,6,p)
+ax.set_aspect(1.0)
+ax.axis('on')
+plt.show()
+fig.savefig('tree2.png')
