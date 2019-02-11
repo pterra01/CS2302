@@ -1,0 +1,72 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
+# PAOLA TERRAZAS
+# CS2302 
+# RECURSIVELY DRAWING CIRCLES
+# DR. FUENTES
+# TA - ANINDITA NATH
+# 2.10.2019
+# NUM 2 CIRCLES
+ 
+
+import matplotlib.pyplot as plt
+import numpy as np
+import math 
+
+def circle(center, rad):  #method to find the x and y coordinates of a circle
+    n = int(4*rad*math.pi) #multiplying the radius of the circle with 4 and pi
+    t = np.linspace(0,6.3,n) #divides the range 0 to 6.3 in n parts and stores array in t
+    #ploting the x and y coordinates based on the value of t
+    #adding the rad to x coordinate
+    x = center[0]+rad*np.sin(t)+rad
+    y = center[1]+rad*np.cos(t)
+    return x,y
+
+def draw_circles(ax,n,center,radius,w): #method to draw circles on the screen
+    if n>0:
+        x,y = circle(center,radius) #getting the value of x,y from the above method
+        #plotting (putting a dot on the screen at x and y coordinates of k color)
+        ax.plot(x,y,color='k') 
+         #calling recursively by increasing the radius value and decreasing n 
+        draw_circles(ax,n-1,center,radius*w,w) 
+       
+#closing the plot method    
+plt.close("all") 
+#subploting using the subplot method
+fig, ax = plt.subplots() 
+#drawing circles with the above ax value 
+draw_circles(ax, 3, [100,0], 100,.4)
+#scaling the circle from data to plot units for x and y
+ax.set_aspect(1.0)
+#turning on the axis of the subplot
+ax.axis('on')
+#showing the plot on the screen
+plt.show()
+#saving the observed ploting as circles.png image
+fig.savefig('circlesa.png')
+
+
+
+
+plt.close("all") 
+fig, ax1 = plt.subplots() 
+draw_circles(ax1, 90, [100,0], 100,.8594537489)
+ax1.set_aspect(1.0)
+ax1.axis('on')
+plt.show()
+fig.savefig('circlesb.png')
+
+
+plt.close("all") 
+fig, ax2 = plt.subplots() 
+draw_circles(ax2, 120, [100,0], 100,.9435443)
+ax2.set_aspect(1.0)
+ax2.axis('on')
+plt.show()
+fig.savefig('circlesc.png')
+
