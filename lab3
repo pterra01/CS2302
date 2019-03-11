@@ -1,0 +1,194 @@
+# PAOLA TERRAZAS
+# CS2302 
+# BST
+# DR. FUENTES
+# TA - ANINDITA NATH
+# 3.10.2019
+# LEARNING TO WORK WITH BINARY TREES AND ALL OF ITS FUNCTIONS
+
+
+class BST(object):
+    # Constructor
+    def __init__(self, item, left=None, right=None):  
+        self.item = item
+        self.left = left 
+        self.right = right      
+        
+def Insert(T,newItem):
+    if T == None:
+        T =  BST(newItem)
+    elif T.item > newItem:
+        T.left = Insert(T.left,newItem)
+    else:
+        T.right = Insert(T.right,newItem)
+    return T
+
+
+def InOrder(T):
+    if T is not None:
+        InOrder(T.left)
+        print(T.item, end = ' ')
+        InOrder(T.right)
+        
+def InOrderD(T,space):
+    if T is not None:
+        InOrderD(T.left,space+ '    ')
+        print(space, T.item)
+        InOrderD(T.right,space+ '    ')
+        
+def Smallest(T):
+    if T is None:
+        return None
+    while T.left is not None:
+        T = T.left
+    return T
+
+def SmallestR(T):
+    if T.left is None:
+        return T
+    return SmallestR(T.left)
+
+def Largest(T):
+    if T.right is None:
+        return T
+    else:
+        return Largest(T.right)
+    
+def Find(T,k):
+    if T is None or T.item == k:
+        return T
+    if T.item < k: 
+        return Find(T.right,k)
+    return Find(T.left,k)
+
+def SumTree(T):
+    if T is None:
+        return 0
+    return T.item + SumTree(T.right) + SumTree(T.left)
+
+def FindDepth(T,k):
+    # returns the depth of k in BST, or None, if k is not in the tree
+    if T is None:
+        return -1
+    if T.item == k:
+        return 0
+    if T.item <k:
+        d = FindDepth(T.right,k)
+    else:
+        d = FindDepth(T.right,k)
+    if d == -1:
+        return -1
+    else:
+        return d+1
+    
+def SumAtDepth(T,d):
+    if T is None:
+        return 0
+    if d ==0:
+        return T.item
+    return SumAtDepth(T.left,d-1) + SumAtDepth(T.right,d-1)
+
+
+
+
+# 2) Iterative version of the search operation
+def Search(T,k):
+    while T.item != k:
+        if T.item > k: # if k is smaller than root searches on left side
+            T = T.left
+        elif T.item < k: # if k is bigger than root go to right side
+            T = T.right
+    return T
+
+# 3) Building a balanced binary search tree given a sorted list 
+    
+def SortedTree(T):
+    if T is None:
+        return []
+    elif T is not None:
+        root = [T.item]
+        left = SortedTree(T.left)
+        right = SortedTree(T.right)
+    return right + root + left # all together the left side the right side and root
+
+        
+
+# 4) Extracting the elements in a binary search tree into a sorted list
+def SortedList(T):
+    if T is None:
+        return []
+    array = [] # creates empty list
+    i = [T.item] # puts T.item into empty list
+    array = array + SortedList(T.left) # puts T.left in list
+    array = array + i # adds root to list
+    array = array + SortedList(T.right) # adds T.right
+    return array
+
+        
+
+    
+# 5) Printing the elements in a binary tree ordered by depth
+def findDepth(T): # same as my FindDepth method but without key as parameter
+    if T is None:
+        return 0
+    else:
+        left = findDepth(T.left)
+        right = findDepth(T.right)
+        if left > right:
+            return left + 1
+        return right + 1
+    
+    
+def printDepth(T, i): 
+    if T is None:
+        return 
+    if i == 0:
+        print(T.item, end= ' ')
+    elif i > 0:
+        printDepth(T.left, i-1)
+        printDepth(T.right, i-1)
+        
+        
+def OrderedByDepth(T):
+    h = findDepth(T)
+    i = 0
+    while i < h:
+        print() # println in java
+        print("Items at level ", i, ":", end= ' ') # prints 
+        printDepth(T, i)
+        i = i + 1
+        
+
+
+    
+
+
+        
+
+T = None
+A = [70, 50, 95, 130, 150, 40, 10, 30, 100]
+for a in A:
+    T = Insert(T,a)
+
+#print(PrintInOrder(T, [], 0))
+#InOrderD(T,'')
+#print(Print(T))
+#print(Smallest(T).item)
+#print(Largest(T).item)
+
+#print(SumTree(T))
+
+# question 2
+print(Search(T,130).item)
+# question 3
+list = SortedTree(T)
+print(list)
+# question 4
+Tree = SortedList(T)
+print(Tree)
+# question 5
+OrderedByDepth(T)
+
+
+#f = Find(T,30)
+#print(f.item)
