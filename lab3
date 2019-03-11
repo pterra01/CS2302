@@ -170,13 +170,13 @@ A = [70, 50, 95, 130, 150, 40, 10, 30, 100]
 for a in A:
     T = Insert(T,a)
 
-#print(PrintInOrder(T, [], 0))
+
 #InOrderD(T,'')
 #print(Print(T))
 #print(Smallest(T).item)
 #print(Largest(T).item)
 
-#print(SumTree(T))
+
 
 # question 2
 print(Search(T,130).item)
@@ -188,7 +188,3 @@ Tree = SortedList(T)
 print(Tree)
 # question 5
 OrderedByDepth(T)
-
-
-#f = Find(T,30)
-#print(f.item)
