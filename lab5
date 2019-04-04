@@ -12,7 +12,7 @@ import time
 
 
 # Hash Table            
-# Implementation of hash tables with chaining using strings
+# Implementation of hash tables with chaining
 
 class HashTableC(object):
     # Builds a hash table of size 'size'
@@ -23,35 +23,34 @@ class HashTableC(object):
         for i in range(size):
             self.item.append([])
         
-def InsertC(H,k,l):
+def InsertC(H,k):
     # Inserts k in appropriate bucket (list) 
     # Does nothing if k is already in the table
-    b = h(k,len(H.item))
-    H.item[b].append([k,l]) 
+    b = k%len(H.item)
+    H.item[b].append(k) 
    
 def FindC(H,k):
     # Returns bucket (b) and index (i) 
     # If k is not in table, i == -1
-    b = h(k,len(H.item))
-    for i in range(len(H.item[b])):
-        if H.item[b][i][0] == k:
-            return b, i, H.item[b][i][1]
-    return b, -1, -1
+    b = k%len(H.item)
+    try:
+        i  = H.item[b].index(k)
+    except:
+        i = -1
+    return b, i
  
-def h(s,n):
-    r = 0
-    for c in s:
-        r = (r*255 + ord(c))% n
-    return r
+def DeleteC(H,k):
+    # Returns k from appropriate list
+    # Does nothing if k is not in the table
+    # Returns 1 in case of a successful deletion, -1 otherwise
+    b = k%len(H.item)
+    try:
+        H.item[b].remove(k)
+        return 1
+    except:
+        return -1
 
-H = HashTableC(11)
-A = ['data','structures','computer','science','university','of','texas','at','el','paso']
-for a in A:
-    InsertC(H,a,len(a))
-    print(H.item)
 
-for a in A: # Prints bucket, position in bucket, and word length
-    print(a,FindC(H,a))
 
 # BST
 class BST(object):
@@ -72,10 +71,10 @@ def LtoT(T,n):
     return mid1
 
 
-def numNodes(T):
+def numofNodes(T):
     if T is None:
         return 0
-    return 1 + numNodes(T.left) + numNodes(T.right)
+    return 1 + numofNodes(T.left) + numofNodes(T.right)
       
 def getHeight(T):
     if T is None:
@@ -104,25 +103,25 @@ def findNode(T,k):
     return findNode(T.right,k)
 
 
-def simi(T,word1,word2):
-    word1 = findNode(T,word1)
+def simi(T,word,word2):
+    word = findNode(T,word)
     word2 = findNode(T,word2)
-    dot = dotPro(word1,word2)
-    mag1 = magnitude(word1)
+    dot = dotPro(word,word2)
+    mag = magnitude(word)
     mag2 = magnitude(word2)
-    total = mag1 * mag2
+    total = mag * mag2
     return dot/total
 
-def magnitude(word):
+def magnitude(w):
     m = 0
-    for i in range(len(word[1])):
-        m += word[1][i] * word[1][i]
+    for i in range(len(w[1])):
+        m += w[1][i] * w[1][i]
     return math.sqrt(m)
 
-def dotPro(word1,word2):
+def dotPro(word,word2):
     dot = 0
-    for i in range(len(word1[1])):
-        dot += word1[1][i] * word2[1][i]
+    for i in range(len(word[1])):
+        dot += word[1][i] * word2[1][i]
     return dot
  
 
@@ -143,9 +142,7 @@ def wordEmbedding(n):
     w = []
     for i in range(len(n)):
         if n[i][0].isalpha():
-            #Putting float elements in one list
             ls = np.array(n[i][1:])
-            #Changing the elements from strings to float points
             l = ls.astype(np.float)
             s = [n[i][0],l]
             w.append(s)
@@ -167,15 +164,14 @@ if ans == 1:
     filename = 'glove.6B.50d.txt'
     inArr = filetoA(filename)
     splitArray = Split(inArr)
-    wrdAndEm = wordEmbedding(splitArray)
-    #Sorting words from txt file
-    wrdAndEm.sort()
-    T = LtoT(T,wrdAndEm)
+    emb = wordEmbedding(splitArray)
+    emb.sort()
+    T = LtoT(T,emb)
     end = time.time()
     print("Binary Search Tree Stats:")
-    print("Number of nodes: ",numNodes(T))
-    print("Height: ",getHeight(T))
-    print("Running time for binary search tree construction: ",end-start)
+    print("Number of nodes: ", numofNodes(T))
+    print("Height: ", getHeight(T))
+    print("Running time for binary search tree construction: ", end-start)
     print()
     print("Reading word file to determine similarities")
     print()
@@ -187,7 +183,7 @@ if ans == 1:
         print("{0:.4f}".format(simi(T,txt[i][0],txt[i][1])))
     end = time.time()
     print()
-    print("Running time for binary search tree query processing: ",abs(start-end))
+    print("Running time for binary search tree query processing: ", abs(start-end))
 
 
 
@@ -199,9 +195,5 @@ elif ans == 2:
     print()
     start = time.time()
     filename = 'glove.6B.50d.txt'
-   
-
-
 else:
     print("Invalid choice, try again.")
-
