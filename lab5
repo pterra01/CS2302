@@ -1,0 +1,206 @@
+# PAOLA TERRAZAS
+# CS2302 
+# Finding similarities
+# DR. FUENTES
+# TA - ANINDITA NATH
+# 4.01.2019
+# create a hash table and binary search tree to read from glove file to search words and similarities as well as other functions
+
+import numpy as np
+import math
+import time
+
+
+# Hash Table            
+# Implementation of hash tables with chaining
+
+class HashTableC(object):
+    # Builds a hash table of size 'size'
+    # Item is a list of (initially empty) lists
+    # Constructor
+    def __init__(self,size):  
+        self.item = []
+        for i in range(size):
+            self.item.append([])
+        
+def InsertC(H,k):
+    # Inserts k in appropriate bucket (list) 
+    # Does nothing if k is already in the table
+    b = k%len(H.item)
+    H.item[b].append(k) 
+   
+def FindC(H,k):
+    # Returns bucket (b) and index (i) 
+    # If k is not in table, i == -1
+    b = k%len(H.item)
+    try:
+        i  = H.item[b].index(k)
+    except:
+        i = -1
+    return b, i
+ 
+def DeleteC(H,k):
+    # Returns k from appropriate list
+    # Does nothing if k is not in the table
+    # Returns 1 in case of a successful deletion, -1 otherwise
+    b = k%len(H.item)
+    try:
+        H.item[b].remove(k)
+        return 1
+    except:
+        return -1
+
+
+
+# BST
+class BST(object):
+    # Constructor
+    def __init__(self, item, left=None, right=None):  
+        self.item = item
+        self.left = left 
+        self.right = right      
+
+def LtoT(T,n):
+    if len(n) == 0:
+        return None
+    mid = len(n)//2
+    if T is None:
+        mid1 = BST(n[mid])
+    mid1.right = LtoT(T,n[mid+1:])
+    mid1.left = LtoT(T,n[:mid])
+    return mid1
+
+
+def numNodes(T):
+    if T is None:
+        return 0
+    return 1 + numNodes(T.left) + numNodes(T.right)
+      
+def getHeight(T):
+    if T is None:
+        return 0
+    left = 1+getHeight(T.left)
+    right = 1+getHeight(T.right)
+    if left > right:
+        return left
+    return right
+
+
+def compare(word1,word2):
+    if word1 > word2:
+        return True
+    return False
+
+
+def findNode(T,k):
+    if T is None:
+        return -1
+    if T.item[0] == k:
+        return T.item
+    i = T.item[0]
+    if compare(i,k):
+        return findNode(T.left,k)
+    return findNode(T.right,k)
+
+
+def simi(T,word1,word2):
+    word1 = findNode(T,word1)
+    word2 = findNode(T,word2)
+    dot = dotPro(word1,word2)
+    mag1 = magnitude(word1)
+    mag2 = magnitude(word2)
+    total = mag1 * mag2
+    return dot/total
+
+def magnitude(word):
+    m = 0
+    for i in range(len(word[1])):
+        m += word[1][i] * word[1][i]
+    return math.sqrt(m)
+
+def dotPro(word1,word2):
+    dot = 0
+    for i in range(len(word1[1])):
+        dot += word1[1][i] * word2[1][i]
+    return dot
+ 
+
+def filetoA(file):
+    f = open(file, encoding="utf8")
+    A = f.readlines()
+    f.close
+    return A
+
+def Split(n):
+    w = []
+    for i in range(len(n)):
+        s = n[i].split()
+        w.append(s)
+    return w
+
+def wordEmbedding(n):
+    w = []
+    for i in range(len(n)):
+        if n[i][0].isalpha():
+            #Putting float elements in one list
+            ls = np.array(n[i][1:])
+            #Changing the elements from strings to float points
+            l = ls.astype(np.float)
+            s = [n[i][0],l]
+            w.append(s)
+    return w
+
+# Main
+print("Choose table implementation")
+print("Type 1 for binary search tree or 2 for hash table with chaining")
+ans = input("Choice: ")
+ans = int(ans)
+if ans == 1:
+    txt = filetoA('words.txt')
+    txt = Split(txt)
+    print()
+    print("Building binary search tree")
+    print()
+    start = time.time()
+    T = None
+    filename = 'glove.6B.50d.txt'
+    inArr = filetoA(filename)
+    splitArray = Split(inArr)
+    wrdAndEm = wordEmbedding(splitArray)
+    #Sorting words from txt file
+    wrdAndEm.sort()
+    T = LtoT(T,wrdAndEm)
+    end = time.time()
+    print("Binary Search Tree Stats:")
+    print("Number of nodes: ",numNodes(T))
+    print("Height: ",getHeight(T))
+    print("Running time for binary search tree construction: ",end-start)
+    print()
+    print("Reading word file to determine similarities")
+    print()
+    print("Word similarities found:")
+    start = time.time()
+    for i in range(len(txt)):
+        print(i+1,': ',txt[i],end='')
+        print(" = ",end='')
+        print("{0:.4f}".format(simi(T,txt[i][0],txt[i][1])))
+    end = time.time()
+    print()
+    print("Running time for binary search tree query processing: ",abs(start-end))
+
+
+
+elif ans == 2:
+    txt = filetoA('words.txt')
+    txt = Split(txt)
+    print()
+    print("Building hash table with chaining")
+    print()
+    start = time.time()
+    filename = 'glove.6B.50d.txt'
+   
+
+
+else:
+    print("Invalid choice, try again.")
+
