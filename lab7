@@ -1,6 +1,6 @@
 # PAOLA TERRAZAS
 # CS2302 
-# Create mazes with x rows and y columns and find paths
+# Solve mazes
 # DR. FUENTES
 # TA - ANINDITA NATH
 # 5.1.2019
@@ -133,12 +133,11 @@ def depthFirst(G,v):
     visited = []
     stack = [v]
     while stack != []:
-        current=stack.pop()
-        
-        for i in G[current]:
+        u = stack.pop()
+        for i in G[u]:
             if i not in visited:
                 stack.append(i)
-            visited.append(current)
+            visited.append(u)
     return visited
 
         
