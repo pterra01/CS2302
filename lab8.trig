@@ -11,7 +11,7 @@ from mpmath import *
 import math
 import mpmath
 
-def equal(f1, f2 ,tries=1000, tolerance=0.0001):
+def isEqual(f1, f2 ,tries=1000, tolerance=0.0001):
     for i in range(tries):
         t = random.uniform(-math.pi, math.pi)
         y1 = eval(f1)
@@ -23,7 +23,7 @@ def equal(f1, f2 ,tries=1000, tolerance=0.0001):
 def trig(trigs):  
     for i in range(len(trigs)):
         for j in range(i+1, len(trigs)):
-            if equal(trigs[i], trigs[j]):
+            if isEqual(trigs[i], trigs[j]):
                 print(trigs[i], 'is equal to', trigs[j])
             print(trigs[i], 'is not equal to', trigs[j])
             
